@@ -8,24 +8,24 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f4762d;
             margin: 30px;
         }
         #search-container {
-            max-width: 1100px;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
         input {
             padding: 13px;
-            width: 90%;
+            width: 70%;
             margin-right: 10px;
         }
         button {
             padding: 10px 20px;
             background-color: #056828;
             color: #ededed;
-            border: yes;
+            border: no;
             cursor: pointer;
         }
         #results-container {
@@ -37,7 +37,7 @@
             padding: 10px;
             border: 7px solid #040303;
             border-radius: 5px;
-            background-color: #a83a3a;
+            background-color: #acaaaa;
         }
         .result img {
             max-width: 100%;
@@ -46,10 +46,11 @@
     </style>
 </head>
 <body>
-
+    <img src="music.jpg.png" alt="The one" width="630" height="420">
     <div id="search-container">
-        <h2>The Music Factory</h2>
-        <h4>Powered by Spotify API</h4>
+        <div id="cubed"></div>
+        <h1 style="font-size: 48px;">The Music Factory</h1>
+        <h1 style="font-size: 22px;">Powered by Spotify API</h1>
         <input type="text" id="search-input" placeholder="Enter a song, artist, or an album">
         <button id="search-btn">Search</button>
     </div>
@@ -96,7 +97,10 @@
                         <h3>${artist.name}</h3>
                         <p>Artist</p>
                         <p>${artist.type}</p>
-                        <img src="${artist.images[0]?.url}" alt="Artist Image">
+                        <p class="genre-label">Genre: ${artist.genres.join(', ')}</p>
+                            <p>${artist.followers.total} followers</p>
+                            <img src="${artist.images.length > 0 ? artist.images[0].url : 'no-image.jpg'}" alt="Artist Image">
+                            <p class="description">${artist.description ? artist.description : 'No description available'}</p>
                     </div>`;
                 });
             }
@@ -104,10 +108,10 @@
                 results.albums.items.forEach(album => {
                     resultsContainer.innerHTML += `<div class="result">
                         <h3>${album.name}</h3>
-                        <p>Album</p>
-                        <p>${album.artists.map(a => a.name).join(', ')}</p>
-                        <p>${album.release_date}</p>
-                        <img src="${album.images[0]?.url}" alt="Album Cover">
+                        <p class="genre-label">Release Date: ${album.release_date}</p>
+                            <p class="genre-label">Artists: ${album.artists.map(artist => artist.name).join(', ')}</p>
+                            <img src="${album.images.length > 0 ? album.images[0].url : 'no-image.jpg'}" alt="Album Cover">
+                            <p class="description">${album.description ? album.description : 'No description available'}</p>
                     </div>`;
                 });
             }
@@ -115,10 +119,11 @@
                 results.tracks.items.forEach(track => {
                     resultsContainer.innerHTML += `<div class="result">
                         <h3>${track.name}</h3>
-                        <p>Track</p>
-                        <p>${track.album.name}</p>
-                        <p>${track.artists.map(a => a.name).join(', ')}</p>
-                        <p>${track.release_date}</p>
+                        <p class="genre-label">Artists: ${track.artists.map(artist => artist.name).join(', ')}</p>
+                            <p class="genre-label">Album: ${track.album.name}</p>
+                            <p class="genre-label">Release Date: ${track.album.release_date}</p>
+                            <img src="${track.album.images.length > 0 ? track.album.images[0].url : 'no-image.jpg'}" alt="Track Album Cover">
+                            <p class="description">${track.lyrics ? track.lyrics : 'Lyrics not available'}</p>
                     </div>`;
                 });
             }
